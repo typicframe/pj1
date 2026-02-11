@@ -114,7 +114,7 @@
         <div class="trigger-zone" style="top: 2.2%;" data-audio="audio/1.mp4" data-msg="第 1 格對白"></div>
         <div class="trigger-zone" style="top: 6.8%;" data-audio="audio/2.mp4" data-msg="第 2 格對白"></div>
         <div class="trigger-zone" style="top: 11.3%;" data-audio="audio/3.mp4" data-msg="第 3 格對白"></div>
-        <div class="trigger-zone" style="top: 15.9%;" data-audio="audio/4.mp3" data-msg="第 4 格對白"></div>
+        <div class="trigger-zone" style="top: 15.9%;" data-audio="audio/4.mp4" data-msg="第 4 格對白"></div>
         <div class="trigger-zone" style="top: 20.4%;" data-audio="audio/5.mp3" data-msg="第 5 格對白"></div>
         <div class="trigger-zone" style="top: 25.0%;" data-audio="audio/6.mp3" data-msg="第 6 格對白"></div>
         <div class="trigger-zone" style="top: 29.5%;" data-audio="audio/7.mp3" data-msg="第 7 格對白"></div>
@@ -141,14 +141,14 @@
 
         // 圖片載入失敗時的處理
         function handleImageError(img) {
-            console.error('圖片載入失敗，已切換至測試預留位置。請確保上傳 GitHub 時路徑為 images/long_comic.jpg');
+            console.error('圖片載入失敗，已切換至測試預留位置。請確保上傳 GitHub 時路徑為 images/long_comic.png');
             // 切換到一個超長的測試背景，讓你依然可以測試捲動功能
-            img.src = "https://placehold.co/600x10000/222/facc15?text=Comic+Loading+Error...%0A%0ACheck+images/long_comic.jpg";
+            img.src = "https://placehold.co/600x10000/222/facc15?text=Comic+Loading+Error...%0A%0ACheck+images/long_comic.png";
             
             // 加入文字提示
             const hint = document.createElement('div');
             hint.className = "error-hint";
-            hint.innerHTML = "<b>提示：</b> 找不到本地圖片 <code>images/long_comic.jpg</code>。<br>上傳 GitHub 時請建立 <code>images</code> 資料夾並放入圖檔。";
+            hint.innerHTML = "<b>提示：</b> 找不到本地圖片 <code>images/long_comic.png</code>。<br>上傳 GitHub 時請建立 <code>images</code> 資料夾並放入圖檔。";
             img.parentNode.insertBefore(hint, img);
         }
 
@@ -195,4 +195,5 @@
         }
     </script>
 </body>
+
 </html>
