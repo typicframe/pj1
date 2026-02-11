@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>發聲條漫 - GitHub Pages 版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #000;
+            color: white;
+            margin: 0;
+            overflow-x: hidden;
+            scrollbar-width: none;
+        }
+        body::-webkit-scrollbar { display: none; }
+
+        .comic-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .long-strip {
+            width: 100%;
+            display: block;
+            min-height: 1000px; /* 確保圖片載入前有高度 */
+        }
+
+        .trigger-zone {
+            position: absolute;
+            width: 100%;
+            height: 50px;
+            left: 0;
+            background: rgba(255, 0, 0, 0); 
+            pointer-events: none;
+        }
+
+        .speech-bubble {
+            position: fixed;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(255, 255, 255, 0.95);
+            color: black;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100;
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .speech-bubble.active {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        #start-overlay {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .start-btn {
+            background: #facc15;
+            color: #000;
+            padding: 16px 48px;
+            border-radius: 32px;
+            font-size: 1.25rem;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+        }
+
+        /* 錯誤提示樣式 */
+        .error-hint {
+            padding: 20px;
+            text-align: center;
+            background: #331111;
+            color: #ffaaaa;
+            border: 1px dashed #ff5555;
+            margin: 10px;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="start-overlay">
+        <h1 class="text-3xl font-bold mb-8 text-yellow-400">聲動條漫</h1>
+        <button class="start-btn" onclick="startComic()">點擊開始閱讀</button>
+        <p class="text-gray-500 mt-4 italic text-sm">※ 建議使用手機瀏覽器獲得最佳體驗</p>
+    </div>
+
+    <div id="global-bubble" class="speech-bubble"></div>
+
+    <div class="comic-container">
+        <!-- 修正點：加入 onerror 處理函數 -->
+        <img id="comic-img" src="images/long_comic.png" alt="漫畫長圖" class="long-strip" onerror="handleImageError(this)">
+
+        <div class="trigger-zone" style="top: 2.2%;" data-audio="audio/1.mp4" data-msg="第 1 格對白"></div>
+        <div class="trigger-zone" style="top: 6.8%;" data-audio="audio/2.mp4" data-msg="第 2 格對白"></div>
+        <div class="trigger-zone" style="top: 11.3%;" data-audio="audio/3.mp4" data-msg="第 3 格對白"></div>
+        <div class="trigger-zone" style="top: 15.9%;" data-audio="audio/4.mp3" data-msg="第 4 格對白"></div>
+        <div class="trigger-zone" style="top: 20.4%;" data-audio="audio/5.mp3" data-msg="第 5 格對白"></div>
+        <div class="trigger-zone" style="top: 25.0%;" data-audio="audio/6.mp3" data-msg="第 6 格對白"></div>
+        <div class="trigger-zone" style="top: 29.5%;" data-audio="audio/7.mp3" data-msg="第 7 格對白"></div>
+        <div class="trigger-zone" style="top: 34.1%;" data-audio="audio/8.mp3" data-msg="第 8 格對白"></div>
+        <div class="trigger-zone" style="top: 38.6%;" data-audio="audio/9.mp3" data-msg="第 9 格對白"></div>
+        <div class="trigger-zone" style="top: 43.2%;" data-audio="audio/10.mp3" data-msg="第 10 格對白"></div>
+        <div class="trigger-zone" style="top: 47.7%;" data-audio="audio/11.mp3" data-msg="第 11 格對白"></div>
+        <div class="trigger-zone" style="top: 52.3%;" data-audio="audio/12.mp3" data-msg="第 12 格對白"></div>
+        <div class="trigger-zone" style="top: 56.8%;" data-audio="audio/13.mp3" data-msg="第 13 格對白"></div>
+        <div class="trigger-zone" style="top: 61.4%;" data-audio="audio/14.mp3" data-msg="第 14 格對白"></div>
+        <div class="trigger-zone" style="top: 65.9%;" data-audio="audio/15.mp3" data-msg="第 15 格對白"></div>
+        <div class="trigger-zone" style="top: 70.5%;" data-audio="audio/16.mp3" data-msg="第 16 格對白"></div>
+        <div class="trigger-zone" style="top: 75.0%;" data-audio="audio/17.mp3" data-msg="第 17 格對白"></div>
+        <div class="trigger-zone" style="top: 79.5%;" data-audio="audio/18.mp3" data-msg="第 18 格對白"></div>
+        <div class="trigger-zone" style="top: 84.1%;" data-audio="audio/19.mp3" data-msg="第 19 格對白"></div>
+        <div class="trigger-zone" style="top: 88.6%;" data-audio="audio/20.mp3" data-msg="第 20 格對白"></div>
+        <div class="trigger-zone" style="top: 93.2%;" data-audio="audio/21.mp3" data-msg="第 21 格對白"></div>
+        <div class="trigger-zone" style="top: 97.7%;" data-audio="audio/22.mp3" data-msg="最終格對白"></div>
+    </div>
+
+    <script>
+        const bubble = document.getElementById('global-bubble');
+        let hideTimeout;
+
+        // 圖片載入失敗時的處理
+        function handleImageError(img) {
+            console.error('圖片載入失敗，已切換至測試預留位置。請確保上傳 GitHub 時路徑為 images/long_comic.jpg');
+            // 切換到一個超長的測試背景，讓你依然可以測試捲動功能
+            img.src = "https://placehold.co/600x10000/222/facc15?text=Comic+Loading+Error...%0A%0ACheck+images/long_comic.jpg";
+            
+            // 加入文字提示
+            const hint = document.createElement('div');
+            hint.className = "error-hint";
+            hint.innerHTML = "<b>提示：</b> 找不到本地圖片 <code>images/long_comic.jpg</code>。<br>上傳 GitHub 時請建立 <code>images</code> 資料夾並放入圖檔。";
+            img.parentNode.insertBefore(hint, img);
+        }
+
+        function startComic() {
+            document.getElementById('start-overlay').style.display = 'none';
+            initObserver();
+        }
+
+        function initObserver() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '-45% 0px -45% 0px', 
+                threshold: 0
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const zone = entry.target;
+                        if (zone.dataset.played === "true") return;
+                        zone.dataset.played = "true";
+
+                        const audioSrc = zone.getAttribute('data-audio');
+                        const msg = zone.getAttribute('data-msg');
+
+                        if (msg) {
+                            clearTimeout(hideTimeout);
+                            bubble.innerText = msg;
+                            bubble.classList.add('active');
+                            hideTimeout = setTimeout(() => {
+                                bubble.classList.remove('active');
+                            }, 4000);
+                        }
+
+                        if (audioSrc) {
+                            const audio = new Audio(audioSrc);
+                            audio.play().catch(e => console.warn("音訊播放失敗。GitHub Pages 須確保檔案存在且大小寫正確:", e));
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.trigger-zone').forEach(z => observer.observe(z));
+        }
+    </script>
+</body>
+</html>
